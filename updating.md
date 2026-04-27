@@ -20,7 +20,7 @@ From the template repo, check what's current on PyPI:
 
 ```shell
 # Check latest versions of each dev dependency:
-for pkg in ruff basedpyright pytest pytest-sugar codespell rich funlog; do
+for pkg in ruff basedpyright pytest pytest-cov pytest-sugar codespell rich funlog pre-commit; do
   echo "$pkg: $(curl -s https://pypi.org/pypi/$pkg/json | python3 -c "import sys,json; print(json.load(sys.stdin)['info']['version'])")"
 done
 
@@ -28,9 +28,7 @@ done
 curl -s https://pypi.org/pypi/uv/json | python3 -c "import sys,json; print('uv:', json.load(sys.stdin)['info']['version'])"
 ```
 
-Also check for new major versions of GitHub Actions:
-- `actions/checkout` — <https://github.com/actions/checkout/releases>
-- `astral-sh/setup-uv` — <https://github.com/astral-sh/setup-uv/releases>
+Also check the GitLab CI image tags and the latest GitLab Release CLI image.
 
 And check if new Python versions should be added to the test matrix.
 
@@ -39,11 +37,9 @@ And check if new Python versions should be added to the test matrix.
 In the template repo, update these files as needed:
 
 - **Dev dependency version pins** in `template/pyproject.toml.jinja`
-- **uv version** in `template/.github/workflows/ci.yml` and `publish.yml`
-  (the `version:` field under `astral-sh/setup-uv`)
-- **GitHub Actions versions** (e.g. `actions/checkout@v6`) in the same workflow files
-- **Python version matrix** in `template/.github/workflows/ci.yml` and the
-  corresponding classifiers in `template/pyproject.toml.jinja`
+- **Python version** in `copier.yml` and GitLab CI/devcontainer/Docker templates
+- **GitLab CI image references** in `template/.gitlab-ci.yml.jinja`
+- **Python classifiers** in `template/pyproject.toml.jinja`
 
 ## Step 3: Commit, Tag, and Push the Template
 
@@ -79,7 +75,7 @@ After the copier update, confirm everything works locally:
 
 ```shell
 uv sync --upgrade
-uv run python devtools/lint.py
+uv run pre-commit run --all-files
 uv run pytest
 uv build
 ```
@@ -94,9 +90,9 @@ git commit -m "Update from simple-modern-uv template vX.Y.Z."
 git push origin main
 ```
 
-Then check that **CI passes on GitHub** — this runs the full lint and test suite across
-all Python versions in the matrix (e.g. 3.11, 3.12, 3.13, 3.14) on the stub test file
-and template code. This is the real end-to-end validation that the template works.
+Then check that **CI passes on GitLab** — this runs the lint and test suite on the stub
+test file and template code. This is the real end-to-end validation that the template
+works.
 
 If CI fails, fix issues in the template repo and repeat from Step 2.
 
@@ -111,7 +107,7 @@ gh release create v0.X.Y --title "v0.X.Y" --notes "$(cat <<'EOF'
 ## What's Changed
 
 - **Updated dev dependencies**: ruff X.Y.Z, basedpyright X.Y.Z, etc.
-- **Updated uv** to X.Y.Z in CI workflows
+- **Updated CI images** or GitLab release tooling
 - Any other changes
 
 **Full Changelog**: https://github.com/jlevy/simple-modern-uv/compare/vPREVIOUS...v0.X.Y

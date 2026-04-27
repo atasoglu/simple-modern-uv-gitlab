@@ -129,21 +129,21 @@ simple-modern-uv uses uses the tools I’ve come to think are best for new proje
   Previously, [black](https://github.com/psf/black) was the definitive formatting tool,
   but ruff now handles linting and fast, black-compatible formatting.
 
-- [**GitHub Actions**](https://github.com/actions/setup-python) for CI and publishing
+- [**GitLab CI**](https://docs.gitlab.com/ci/) for CI and publishing
   workflows.
 
 - [**Dynamic versioning**](https://github.com/ninoseki/uv-dynamic-versioning/) so
-  release and package publication is as simple as creating a tag/release on GitHub (no
+  release and package publication is as simple as creating a tag on GitLab (no
   machinery needed to manually bump versions and commit files every release).
 
-- Workflows for **packaging and publishing to PyPI** with uv.
+- Workflows for **packaging and publishing to the GitLab PyPI package registry** with uv.
   This has always been more confusing than it should be.
   The
   [official docs](https://packaging.python.org/en/latest/tutorials/packaging-projects/)
   about packaging are several pages long, and then even
   [toy tutorials](https://realpython.com/pypi-publish-python-package/) about publishing
-  are even longer. This template makes all of that basically automatic with uv, GitHub
-  Actions, and dynamic versioning.
+  are even longer. This template makes all of that basically automatic with uv, GitLab
+  CI, and dynamic versioning.
 
 - Type checking with [**BasedPyright**](https://github.com/detachhead/basedpyright).
   (See below for more on this.)
@@ -155,32 +155,25 @@ simple-modern-uv uses uses the tools I’ve come to think are best for new proje
 - [**codespell**](https://github.com/codespell-project/codespell) for drop-in spell
   checking.
 
-## Starter Docs
+- [**pre-commit**](https://pre-commit.com/) for local lint hooks.
 
-The template includes a few **starter docs** for you, collaborators, and users:
+## Starter README
+
+The template includes a starter README for you, collaborators, and users:
 
 - [README.md](https://github.com/jlevy/simple-modern-uv/blob/main/template/README.md.jinja)
-  is a placeholder for your project readme.
-
-- [installation.md](https://github.com/jlevy/simple-modern-uv/blob/main/template/docs/installation.md)
-  has brief reminders on the modern ways to install uv and Python.
-
-- [development.md](https://github.com/jlevy/simple-modern-uv/blob/main/template/docs/development.md.jinja)
-  covers basic developer workflows.
-
-- [publishing.md](https://github.com/jlevy/simple-modern-uv/blob/main/template/docs/publishing.md)
-  covers how to publish your project to PyPI.
+  is a placeholder for your project readme and includes short installation,
+  development, and GitLab package publishing notes.
 
 If you haven’t done it before, publishing a package to PyPI can be a bit confusing,
 especially because the
 [official Python docs](https://packaging.python.org/en/latest/guides/section-build-and-publish/)
 cover older and more complex workflows.
-Be sure to check `publishing.md` for a modern and simple way that uses uv and GitHub
-actions.
+Be sure to check the generated `README.md` for a modern and simple way that uses uv and
+GitLab CI.
 
-You can edit or delete these, but typically it’s sufficient to just edit the README.md.
-It helps to have the others in separate files so they get updated whenever you update
-the template.
+You can edit or delete this content, but typically it’s sufficient to adapt the
+generated `README.md` for your project.
 
 ## Agent Rules
 
@@ -233,25 +226,14 @@ It just adds the above essentials.
 
 This template **does not** handle:
 
-- Using Docker
-
-- Private or enterprise package repositories (but you can add this—see
-  [uv’s docs on alternative indexes](https://docs.astral.sh/uv/guides/integration/alternative-indexes/))
-
-- Building websites or docs, e.g. with [mkdocs](https://github.com/mkdocs/mkdocs)
-
 - Using [Conda](https://github.com/conda/conda) for dependencies (but note many deep
   learning libraries like PyTorch now support pip so this isn’t as necessary as often as
   it used to be)
 
-- Using a code repo or build system that isn’t GitHub and GitHub Actions
+- Code of conduct, issue templates, or other project management files.
 
-- Boilerplate docs or project management of any kind, like issue templates, contributing
-  guidelines, code of conduct, etc.
-
-Docker and private repo use can be added by you manually to the project after you get
-started. Similarly, you can change CI/CD workflows if you are not using GitHub or GitHub
-Actions or PyPI.
+You can change CI/CD workflows if you are not using GitLab CI or the GitLab package
+registry.
 
 Also see [below](#alternatives) for other templates you can look at or use as
 references.
@@ -261,8 +243,8 @@ references.
 By default this template uses MIT license.
 If you want a different license or are not publishing your project as open source,
 update `license` in pyproject.yaml and the LICENSE file.
-If desired, you may delete the `.github/workflows/publish.yml` file if you are not
-publishing to PyPI.
+If desired, you may delete the `.gitlab-ci.yml` file if you are not publishing from
+GitLab CI.
 
 The template can be used in three ways.
 Option 1 is the quickest option with full flexibility.
@@ -295,11 +277,11 @@ To create a new project repo with `copier`:
 # Install Copier:
 uv tool install copier
 
-# Change dirs to the place you want the new GitHub repo to be.
-cd ~/projects/github   # Wherever you do your project work.
+# Change dirs to the place you want the new GitLab repo to be.
+cd ~/projects/gitlab   # Wherever you do your project work.
 
 # Clone this template. This does everything!
-# It will fetch from this GitHub repo and create a new directory
+# It will fetch from this template repo and create a new directory
 # with whatever name you put below:
 copier copy gh:jlevy/simple-modern-uv YOURNEWREPO
 # Then follow the instructions.
@@ -310,7 +292,7 @@ look for `changeme` in the code.
 
 Once you have the template set up, you will need to check the code into Git for uv to
 work.
-[Create a new GitHub repo](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-new-repository)
+[Create a new GitLab project](https://docs.gitlab.com/user/project/)
 — make sure to create it as an **empty repo** (don't add a README, .gitignore, or
 license, since the template already provides these) — and add your initial code:
 
@@ -320,8 +302,8 @@ git init
 # Make license or other initial adjustments if needed.
 git add .
 git commit -m "Initial commit from simple-modern-uv."
-# Create repo on GitHub.
-git remote add origin git@github.com:OWNER/PROJECT.git  # or https://github.com/...
+# Create repo on GitLab.
+git remote add origin git@gitlab.com:NAMESPACE/PROJECT.git  # or https://gitlab.com/...
 git branch -M main
 git push -u origin main
 ```
@@ -339,9 +321,7 @@ You will also want to check the license/copyright.
 
 ## Getting Started on Your Project
 
-Everything to get started is linked from the project **README.md**. It links to the
-**installation.md**, **development.md**, and **publishing.md**
-[starter docs](#starter-docs).
+Everything to get started is summarized in the generated project **README.md**.
 
 ## Updating Your Project Template
 
@@ -378,8 +358,7 @@ Another great resource to check is
 [**python-blueprint**](https://github.com/johnthagen/python-blueprint), which is a more
 established template with an excellent overview of other standard Python project best
 practices. It uses [Poetry](https://python-poetry.org/docs/basic-usage/),
-[nox](https://github.com/wntrblm/nox),
-[Material for Mkdocs](https://github.com/squidfunk/mkdocs-material), and Docker.
+[nox](https://github.com/wntrblm/nox), documentation tooling, and Docker.
 
 For [Conda](https://github.com/conda/conda) dependencies, also consider the newer
 [**pixi**](https://github.com/prefix-dev/pixi/) package manager.

@@ -8,13 +8,72 @@ project.\]\]\]
 
 * * *
 
-## Project Docs
+## Installation
 
-For how to install uv and Python, see [installation.md](docs/installation.md).
+This project uses [uv](https://docs.astral.sh/uv/) for Python and dependency
+management.
 
-For development workflows, see [development.md](docs/development.md).
+Install uv if needed:
 
-For instructions on publishing to PyPI, see [publishing.md](docs/publishing.md).
+```shell
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+Then install Python and project dependencies:
+
+```shell
+uv python install {{ python_version }}
+uv sync --all-extras
+```
+
+## Development
+
+The `Makefile` provides shortcuts for the common development workflow:
+
+```shell
+make install      # Install dependencies
+make lint         # Run pre-commit hooks
+make typecheck    # Run BasedPyright
+make test         # Run tests with coverage
+make build        # Build the package
+make clean        # Remove generated local artifacts
+```
+
+Install pre-commit hooks once after cloning:
+
+```shell
+uv run pre-commit install
+```
+
+Useful direct commands:
+
+```shell
+uv run pytest
+uv run pre-commit run --all-files
+uv add package_name
+uv add --dev package_name
+```
+
+## Publishing
+
+Releases are published to the GitLab PyPI package registry by GitLab CI. The flow is
+tag-driven:
+
+1. Push a version tag such as `v0.1.0`.
+2. GitLab CI runs linting and tests.
+3. The `pypi` job builds and uploads the package.
+4. The `release` job creates a GitLab Release.
+
+Create a release tag:
+
+```shell
+git status
+git tag vX.Y.Z
+git push origin vX.Y.Z
+```
+
+For private packages, configure access to the GitLab package registry with a deploy
+token, personal access token, or CI job token.
 
 * * *
 

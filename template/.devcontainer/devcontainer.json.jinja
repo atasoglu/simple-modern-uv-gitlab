@@ -1,0 +1,20 @@
+{
+  "name": "{{ package_name }}",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "PYTHON_VERSION": "{{ python_version }}"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "detachhead.basedpyright"
+      ]
+    }
+  },
+  "postCreateCommand": "uv sync --all-extras && uv run pre-commit install",
+  "remoteUser": "vscode"
+}

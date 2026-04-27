@@ -1,0 +1,45 @@
+# Contributing
+
+Thanks for your interest in contributing to `{{ package_name }}`.
+
+## Setup
+
+Fork the project on GitLab, then clone your fork:
+
+```shell
+git clone git@gitlab.com:{{ package_gitlab_namespace }}/{{ package_name }}.git
+cd {{ package_name }}
+```
+
+Install the development environment:
+
+```shell
+uv sync --all-extras
+uv run pre-commit install
+```
+
+## Development Workflow
+
+Run linting and tests before opening a merge request:
+
+```shell
+make lint
+make test
+```
+
+You can also run pre-commit directly:
+
+```shell
+uv run pre-commit run --all-files
+```
+
+## Merge Requests
+
+Create a feature branch, push it to GitLab, and open a merge request:
+
+```shell
+git checkout -b my-change
+git push -u origin my-change
+```
+
+Keep merge requests focused and include tests for behavior changes.

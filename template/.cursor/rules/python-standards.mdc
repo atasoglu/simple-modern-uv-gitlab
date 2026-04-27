@@ -1,0 +1,96 @@
+---
+description: Modern Python coding standards for this project. Enforces SOLID, DRY, clean code principles, Google-style docstrings, and a lint-green/test-green development workflow.
+alwaysApply: true
+---
+
+# Python Standards
+
+## Code principles
+
+- **Single Responsibility**: every function and class does one thing. If you need
+  "and" to describe it, split it.
+- **DRY**: extract duplicated logic into a named function or constant before the
+  second copy appears.
+- **Explicit over implicit**: prefer clear names and explicit types over clever
+  shortcuts. Avoid `*args/**kwargs` unless the call site genuinely needs them.
+- **Small units**: functions should fit on one screen (~30 lines). Classes should
+  have a single clear purpose.
+- **No dead code**: remove commented-out code, unused imports, and unreachable
+  branches instead of leaving them "just in case".
+
+## Type annotations
+
+All public functions, methods, and module-level variables must have type
+annotations. Use `from __future__ import annotations` when you need forward
+references; it is not required otherwise.
+
+```python
+# GOOD
+def parse(raw: str) -> list[str]:
+    ...
+
+# BAD
+def parse(raw):
+    ...
+```
+
+## Docstrings — Google style
+
+Every public function, method, and class must have a Google-style docstring.
+Private helpers (`_name`) are encouraged but not required.
+
+```python
+def fetch(url: str, timeout: int = 30) -> bytes:
+    """Fetch the content at *url* and return the raw bytes.
+
+    Args:
+        url: The URL to request.
+        timeout: Request timeout in seconds.
+
+    Returns:
+        Raw response body.
+
+    Raises:
+        httpx.HTTPStatusError: If the server returns a 4xx or 5xx status.
+    """
+```
+
+Class docstring describes the class purpose; `__init__` parameters go in the
+class docstring, not in `__init__` itself.
+
+```python
+class TokenBucket:
+    """Rate limiter using the token-bucket algorithm.
+
+    Args:
+        capacity: Maximum number of tokens.
+        refill_rate: Tokens added per second.
+    """
+```
+
+## Lint and tests must stay green
+
+- **Before committing**: run `make lint && make test`. Do not commit red code.
+- **While implementing**: keep tests passing at every step — write the test first
+  or immediately after adding a function, not at the end.
+- If a lint rule fires on new code, fix the code, not the rule (unless the rule
+  is a known false positive).
+- Pre-commit hooks run automatically on `git commit`. Fix any hook failures
+  before re-committing; do not use `--no-verify`.
+
+## Error handling
+
+Raise specific exceptions with descriptive messages. Never silence exceptions
+with a bare `except:` or `except Exception: pass`.
+
+```python
+# GOOD
+if value < 0:
+    raise ValueError(f"value must be non-negative, got {value}")
+
+# BAD
+try:
+    process(value)
+except Exception:
+    pass
+```

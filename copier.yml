@@ -2,28 +2,28 @@
 
 _min_copier_version: "9.4.0"
 _subdirectory: template
-_message_after_copy: | 
+_message_after_copy: |
     Your package template has been copied!
 
     Remember to look for any unfilled `changeme` strings and confirm the license!
     By default this template uses MIT license.
-    See `license` in pyproject.yaml and update the LICENSE file. 
+    See `license` in pyproject.yaml and update the LICENSE file.
 
     Next steps:
-    
+
     cd PROJECT
     git init
     # Make license or other initial adjustments if needed.
     git add .
     git commit -m "Initial commit from simple-modern-uv."
-    # Create repo on GitHub.
-    git remote add origin git@github.com:OWNER/PROJECT.git  # or https://...
+    # Create repo on GitLab.
+    git remote add origin git@gitlab.com:NAMESPACE/PROJECT.git  # or https://...
     git branch -M main
     git push -u origin main
 
 package_name:
     type: str
-    help: What is the package name? (This will be the GitHub repo and PyPI package name, so use CamelCase, dash-case, or snake_case. This is the only required field.)
+    help: What is the package name? (This will be the GitLab repo and package registry name, so use CamelCase, dash-case, or snake_case. This is the only required field.)
     default: changeme
 
 package_module:
@@ -46,7 +46,12 @@ package_author_email:
     help: Package author email? (Press enter to fill in later.)
     default: changeme@example.com
 
-package_github_org:
+package_gitlab_namespace:
     type: str
-    help: Package GitHub org or username? (Press enter to fill in later.)
+    help: Package GitLab namespace, group, or username? (Press enter to fill in later.)
     default: changeme
+
+python_version:
+    type: str
+    help: Python version for Docker and devcontainer images?
+    default: "3.12"
