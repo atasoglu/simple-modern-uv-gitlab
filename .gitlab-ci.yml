@@ -1,0 +1,35 @@
+stages:
+  - pypi
+
+variables:
+  UV_CACHE_DIR: .uv-cache
+
+default:
+  image: python:3.10-slim
+  before_script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends curl git
+    - rm -rf /var/lib/apt/lists/*
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - export PATH="$HOME/.local/bin:$PATH"
+  cache:
+    key:
+      files:
+        - pyproject.toml
+    paths:
+      - .uv-cache/
+
+pypi:
+  stage: pypi
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+  script:
+    - uv build
+    - >
+      uv publish
+      --publish-url "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi"
+      --username gitlab-ci-token
+      --password "${CI_JOB_TOKEN}"
+  artifacts:
+    paths:
+      - dist/
